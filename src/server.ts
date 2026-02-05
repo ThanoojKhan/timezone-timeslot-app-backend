@@ -4,7 +4,6 @@ import ENV from "./config/env";
 import { connectMongoDB, disconnectMongoDB } from "./config/mongodb";
 
 const port = ENV.PORT;
-
 const server = http.createServer(app);
 
 async function startServer() {
@@ -20,22 +19,34 @@ async function startServer() {
   }
 }
 
-// Start the server
 startServer();
 
+/* graceful shutdown */
+async function shutdown(signal: NodeJS.Signals) {
+  console.log(`Received ${signal}. Shutting down...`);
 
-async function shutdown(signal: string) {
   try {
     await disconnectMongoDB();
 
     server.close(() => {
       process.exit(0);
     });
-  } catch (error) {
+
+    setTimeout(() => process.exit(1), 10000);
+  } catch {
     process.exit(1);
   }
 }
 
-// Shutdown the server
 process.on("SIGINT", shutdown);
 process.on("SIGTERM", shutdown);
+
+process.on("unhandledRejection", (err) => {
+  console.error("Unhandled Rejection:", err);
+  shutdown("SIGTERM");
+});
+
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err);
+  shutdown("SIGTERM");
+});
