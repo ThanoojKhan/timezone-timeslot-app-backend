@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import ENV from "./env";
+import AppError from "../utils/appError";
+import { log } from "console";
 
 const MONGODB_URI = ENV.MONGODB_URI;
 
@@ -10,15 +12,18 @@ export async function connectMongoDB(): Promise<void> {
             maxPoolSize: 10,
             autoIndex: false
         });
-
-        console.log("MongoDB connected");
-    } catch (error) {
-        console.error("MongoDB connection failed");
-        throw error;
+        console.log("Connected to MongoDB");
+    } catch (err) {
+        console.error(err);
+        throw new AppError({ statusCode: 500, message: "MongoDB connection failed", error: err });
     }
 }
 
 export async function disconnectMongoDB(): Promise<void> {
-    await mongoose.disconnect();
-    console.log("MongoDB disconnected");
+    try {
+        await mongoose.disconnect();
+        console.log("Disconnected from MongoDB");
+    } catch (err) {
+        throw new AppError({ statusCode: 500, message: "MongoDB disconnect failed", error: err });
+    }
 }
