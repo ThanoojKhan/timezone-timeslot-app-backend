@@ -1,9 +1,7 @@
 import http from "http";
-import dotenv from 'dotenv';
-dotenv.config();
 import app from "./app";
+import ENV from "./config/env";
 import { connectMongoDB, disconnectMongoDB } from "./config/mongodb";
-import ENV from "./utils/validateEnv";
 
 const port = ENV.PORT;
 
@@ -22,6 +20,7 @@ async function startServer() {
   }
 }
 
+// Start the server
 startServer();
 
 
@@ -37,5 +36,6 @@ async function shutdown(signal: string) {
   }
 }
 
+// Shutdown the server
 process.on("SIGINT", shutdown);
 process.on("SIGTERM", shutdown);

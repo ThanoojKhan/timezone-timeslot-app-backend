@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import ENV from "../utils/validateEnv";
+import ENV from "./env";
 
 const MONGODB_URI = ENV.MONGODB_URI;
 

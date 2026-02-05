@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import timeRoutes from "./routes/timeRoutes";
-import ENV from "./utils/validateEnv";
+import ENV from "./config/env";
 
 const app = express();
 
