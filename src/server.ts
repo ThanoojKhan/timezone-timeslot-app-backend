@@ -5,7 +5,6 @@ import app from "./app";
 import { connectMongoDB, disconnectMongoDB } from "./config/mongodb";
 import ENV from "./utils/validateEnv";
 
-
 const port = ENV.PORT;
 
 const server = http.createServer(app);
