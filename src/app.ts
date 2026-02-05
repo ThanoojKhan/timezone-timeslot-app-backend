@@ -2,11 +2,16 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import timeRoutes from "./routes/timeRoutes";
+import ENV from "./utils/validateEnv";
 
 const app = express();
 
 app.use(cors());
-app.use(morgan("combined")); // Used for logging
+if (ENV.NODE_ENV === "development") {
+    app.use(morgan("dev"));
+} else {
+    app.use(morgan("combined"));
+} // Used for logging
 
 app.use(express.json({ limit: "5mb" }));
 
